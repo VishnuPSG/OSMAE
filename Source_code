@@ -1,0 +1,116 @@
+// Code for DHT11 Temperature and humidity sensor.
+ #include "DHT.h "  
+ #include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+int pltpin=3;
+int watmotpin=4;
+long int pm25;
+String motst;
+String pltst;
+String drkst;
+int dly1=2*1000;
+LiquidCrystal_I2C lcd(0x27,16,2);   
+#define AOUT_PIN A1 
+
+
+
+
+ #define DHTPIN 2  
+ #define DHTTYPE DHT11 
+ DHT dht ( DHTPIN, DHTTYPE ) ;
+ void setup ( ) {
+   lcd.init();
+   lcd.clear();
+   lcd.backlight();
+  
+  lcd.setCursor(0,0);
+  lcd.print("Project Done BY");
+  lcd.setCursor(0,1);
+  lcd.print("Dharun");
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Project Done BY");
+  lcd.setCursor(0,1);
+  lcd.print("Essa");
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Project Done BY");
+  lcd.setCursor(0,1);
+  lcd.print("Hari Prasath K R");
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Project Done BY");
+  lcd.setCursor(0,1);
+  lcd.print("Vishnu Sri Hari");
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Project Done BY");
+  lcd.setCursor(0,1);
+  lcd.print("Visnu Tharsan T");
+  delay(1000);
+  lcd.clear();
+   Serial.begin ( 9600 ) ;
+   dht.begin (  ) ;
+   pinMode(pltpin,OUTPUT);
+ }
+ void loop ( ) {
+   int value = analogRead(AOUT_PIN);  
+   value=map(value,900,0,0,100);
+   pm25=random(40,60);
+  int humidity = dht.readHumidity ( ) ;
+  int temp = dht.readTemperature ( ) ;
+     Serial.print ( " Temp is " ) ;  
+     Serial.print ( temp ) ;
+     Serial.println ( " *C " ) ;
+     Serial.print ( " Humidity in % is : " ) ;                    
+     Serial.print ( humidity ) ;
+     Serial.print ( " % \t " ) ;
+      Serial.print ( " PM2.5 is : " ) ;                    
+     Serial.print ( pm25 ) ;
+     Serial.print ( " \t " ) ;
+      Serial.print ( " Moisture in % is : " ) ;                    
+     Serial.print ( value ) ;
+     Serial.print ( " % \t " ) ;
+      if(humidity>=60.00){
+        pltst="ON";
+          digitalWrite(pltpin,1);
+      }  
+      if(humidity<=50.00){
+        pltst="OFF";
+          digitalWrite(pltpin,0);
+      } 
+      if(value<=35){
+        motst="ON";
+        digitalWrite(watmotpin,1);
+      }   
+      if(value>=60){
+        motst="OFF";
+        digitalWrite(watmotpin,0);
+      } 
+  lcd.setCursor(0,0);
+  lcd.print("Hum "+String(humidity));
+  lcd.print(" Tem "+String(temp));
+  
+  lcd.setCursor(0,1);
+  lcd.print("Soil Mos "+String(value));
+  delay(dly1);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Motor Status");
+  lcd.setCursor(0,1);
+  lcd.print(motst);
+  delay(dly1);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Peltier Status");
+  lcd.setCursor(0,1);
+  lcd.print(pltst);
+  delay(dly1);
+  lcd.clear();
+delay(500);
+                    
+ }
